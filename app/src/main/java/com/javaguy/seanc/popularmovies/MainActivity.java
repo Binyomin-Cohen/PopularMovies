@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
@@ -25,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
         ImageView imageView = (ImageView)findViewById(R.id.imageView);
         Picasso.with(getApplicationContext()).load("http://webmachers.tech/me.jpg").into(imageView);
 
-        String url = "https://api.themoviedb.org/3/movie/550?api_key=INSERT_API_KEY_HERE";
+
+
+        String url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=API_KEY_GOES_HERE";
         MovieGetterTask mgt = new MovieGetterTask();
         mgt.execute(url);
     }
@@ -56,8 +59,17 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
 
-            Toast toast = Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG);
-            toast.show();
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("results");
+                int size = jsonArray.length();
+                Toast toast = Toast.makeText(getApplicationContext(), "the size is" + size, Toast.LENGTH_LONG);
+                toast.show();
+            }
+            catch (Exception e) {
+                Log.e("MovieTask.onPostExecute", e.toString());
+            }
         }
     }
 }
