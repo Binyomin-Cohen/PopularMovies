@@ -1,10 +1,12 @@
 package com.javaguy.seanc.popularmovies;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Downloader;
@@ -15,20 +17,33 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
+    ArrayList<String> movies;  // this is the toString of the JSONObject of each movie
+    JSONArray movieResponse;
+    ListView listView;
+    CustArrAdapter arrAdapter;
+    Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        movies = null;
+        movieResponse = null;
         setContentView(R.layout.activity_main);
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
-        Picasso.with(getApplicationContext()).load("http://webmachers.tech/me.jpg").into(imageView);
+        listView = (ListView)findViewById(R.id.listView);
+
+
+        //ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        //Picasso.with(getApplicationContext()).load("http://webmachers.tech/me.jpg").into(imageView);
 
 
 
-        String url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=API_KEY_GOES_HERE";
+        String url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=API_KEY";
         MovieGetterTask mgt = new MovieGetterTask();
         mgt.execute(url);
     }
@@ -61,11 +76,19 @@ public class MainActivity extends AppCompatActivity {
 
 
             try {
+
                 JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("results");
-                int size = jsonArray.length();
-                Toast toast = Toast.makeText(getApplicationContext(), "the size is" + size, Toast.LENGTH_LONG);
-                toast.show();
+                movieResponse = jsonObject.getJSONArray("results");
+                movies = new ArrayList<String>();
+
+                for(int i = 0; i < movieResponse.length(); ++i){
+                    movies.add(movieResponse.getJSONObject(i).toString());
+                }
+                arrAdapter = new CustArrAdapter(context, R.layout.movie_home_page, movies.toArray());
+                listView.setAdapter(arrAdapter);
+
+               //Toast toast = Toast.makeText(getApplicationContext(), "the size is" + size, Toast.LENGTH_LONG);
+                //toast.show();
             }
             catch (Exception e) {
                 Log.e("MovieTask.onPostExecute", e.toString());
