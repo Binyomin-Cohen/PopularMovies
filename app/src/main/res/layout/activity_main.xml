@@ -10,9 +10,13 @@
     tools:context="com.javaguy.seanc.popularmovies.MainActivity">
 
 
-    <ListView
+    <GridView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_gravity="center" />
+        android:columnWidth="90dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:id="@+id/gridView"
+        android:layout_gravity="left|top" />
 </FrameLayout>

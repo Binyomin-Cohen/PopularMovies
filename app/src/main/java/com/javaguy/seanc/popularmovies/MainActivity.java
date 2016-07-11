@@ -1,10 +1,14 @@
 package com.javaguy.seanc.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -25,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> movies;  // this is the toString of the JSONObject of each movie
     JSONArray movieResponse;
-    ListView listView;
+    GridView gridView;
     CustArrAdapter arrAdapter;
     Context context = this;
 
@@ -35,13 +39,7 @@ public class MainActivity extends AppCompatActivity {
         movies = null;
         movieResponse = null;
         setContentView(R.layout.activity_main);
-        listView = (ListView)findViewById(R.id.listView);
-
-
-        //ImageView imageView = (ImageView)findViewById(R.id.imageView);
-        //Picasso.with(getApplicationContext()).load("http://webmachers.tech/me.jpg").into(imageView);
-
-
+        gridView = (GridView)findViewById(R.id.gridView);
 
         String url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=API_KEY";
         MovieGetterTask mgt = new MovieGetterTask();
@@ -85,7 +83,17 @@ public class MainActivity extends AppCompatActivity {
                     movies.add(movieResponse.getJSONObject(i).toString());
                 }
                 arrAdapter = new CustArrAdapter(context, R.layout.movie_home_page, movies.toArray());
-                listView.setAdapter(arrAdapter);
+                gridView.setAdapter(arrAdapter);
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String movieDetails = parent.getAdapter().getItem(position).toString();
+                        Intent intent = new Intent(context, MovieDetailActivity.class);
+                        intent.putExtra("MovieDetails", movieDetails);
+                        startActivity(intent);
+                    }
+                });
+
 
                //Toast toast = Toast.makeText(getApplicationContext(), "the size is" + size, Toast.LENGTH_LONG);
                 //toast.show();
