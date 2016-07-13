@@ -3,4 +3,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="sortNames">
+        <item>Sort By Popularity</item>
+        <item>Sort by Top Rated</item>
+    </string-array>
+
+    <string-array name="sortValues">
+        <item>pop</item>
+        <item>top</item>
+    </string-array>
 </resources>

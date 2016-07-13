@@ -51,13 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
         MovieGetterTask mgt = new MovieGetterTask();
         mgt.execute(urlPopular);
-
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         onSharedPrefereneceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 
-                Log.d("sharedPrefChange", key + " " + prefs.getBoolean("sortBy", true));
-                byPopular = prefs.getBoolean("sortBy", true);
+                byPopular = "pop".equals(prefs.getString("sortBy", "pop"));
 
                 MovieGetterTask mgt = new MovieGetterTask();
                 if(byPopular ){

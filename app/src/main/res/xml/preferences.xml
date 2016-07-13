@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference
+
+<PreferenceCategory>
+    <ListPreference
+        android:title="Sort Movies By"
         android:key="sortBy"
-        android:defaultValue="true"
-        android:switchTextOn="by popular"
-        android:switchTextOff="by recent"
-        android:summaryOn="Sort ByPopular"
-        android:summaryOff="Sort By Date"
-        />
+        android:defaultValue="0"
+        android:entries="@array/sortNames"
+        android:entryValues="@array/sortValues" />
+</PreferenceCategory>
 
 
 </PreferenceScreen>
