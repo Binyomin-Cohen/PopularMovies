@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:key="sortBy"
+        android:defaultValue="true"
+        android:switchTextOn="by popular"
+        android:switchTextOff="by recent"
+        android:summaryOn="Sort ByPopular"
+        android:summaryOff="Sort By Date"
+        />
+
+
+</PreferenceScreen>

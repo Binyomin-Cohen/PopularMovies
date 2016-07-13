@@ -16,6 +16,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     TextView movieTitleView = null;
     TextView movieSummaryView = null;
+    TextView releaseDateView = null;
     ImageView imageView = null;
 
 
@@ -23,8 +24,9 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-        movieTitleView= (TextView)findViewById(R.id.originalTitle);
+        movieTitleView= (TextView)findViewById(R.id.movieTitle);
         movieSummaryView = (TextView)findViewById(R.id.movieSummary);
+        releaseDateView = (TextView)findViewById(R.id.releaseDate);
         imageView = (ImageView)findViewById(R.id.imageView2);
         Intent intent = getIntent();
         String movieDetails = intent.getStringExtra("MovieDetails");
@@ -37,6 +39,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             Picasso.with(this).load(imageUrl).into(imageView);
             movieTitleView.setText(movieJson.getString("title"));
             movieSummaryView.setText(movieJson.getString("overview"));
+            releaseDateView.setText(movieJson.getString("release_date"));
         } catch (JSONException e) {
             Log.e("MoveDetAct.onCreate", e.toString());
         }
