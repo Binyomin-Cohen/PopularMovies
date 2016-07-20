@@ -1,5 +1,6 @@
 package com.javaguy.seanc.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -10,7 +11,9 @@ import android.view.View;
 import android.webkit.JsResult;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -20,6 +23,8 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -32,6 +37,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     String videoUri = null;
     Button viewButton = null;
     Long movieId = null;
+    Context context = this;
+    ListView reviewsView = null;
 
 
     @Override
@@ -43,6 +50,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         releaseDateView = (TextView)findViewById(R.id.releaseDate);
         imageView = (ImageView)findViewById(R.id.imageView2);
         viewButton = (Button)findViewById(R.id.button);
+        reviewsView = (ListView)findViewById(R.id.reviewsListView);
 
         Intent intent = getIntent();
         String movieDetails = intent.getStringExtra("MovieDetails");
@@ -57,6 +65,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             movieSummaryView.setText(movieJson.getString("overview"));
             releaseDateView.setText(movieJson.getString("release_date"));
             movieId = movieJson.getLong("id");
+            ReviewsTask rt = new ReviewsTask();
+            rt.execute(movieId);
 
         } catch (JSONException e) {
             Log.e("MoveDetAct.onCreate", e.toString());
@@ -75,7 +85,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Long... params) {
-            String movieUrl = "https://api.themoviedb.org/3/movie/" + params[0] +"/videos?api_key=APIKEY";
+            String movieUrl = "https://api.themoviedb.org/3/movie/" + params[0] +"/videos?api_key="+ MainActivity.API_KEY;
             URL url = null;
             String key = null;
             HttpURLConnection connection = null;
@@ -116,6 +126,54 @@ public class MovieDetailActivity extends AppCompatActivity {
                 Log.d("TheKey", "isNull");
             }
 
+        }
+    }
+
+    private class ReviewsTask extends AsyncTask<Long, Void, String>{
+
+        @Override
+        protected String doInBackground(Long... params) {
+            String theUrl = "https://api.themoviedb.org/3/movie/" + params[0] + "/reviews?api_key=" + MainActivity.API_KEY;
+            HttpURLConnection connection = null;
+            URL url = null;
+            String result = null;
+            try{
+                url = new URL(theUrl);
+                connection = (HttpURLConnection)url.openConnection();
+                Scanner scanner = new Scanner(connection.getInputStream()).useDelimiter("\\A");
+                result = scanner.hasNext() ? scanner.next() : "";
+            }
+            catch(Exception e){
+                Log.e("ReviewsTask", e.toString());
+            }
+            finally{
+                connection.disconnect();
+            }
+            return result;
+        }
+
+        protected void onPostExecute(String reviews){
+            try{
+                JSONObject jReviews = new JSONObject(reviews);
+                if( jReviews.has("results") && jReviews.getJSONArray("results").length() > 0){
+                    JSONArray reviewsArray = jReviews.getJSONArray("results");
+                    ArrayList<String> reviewsList = new ArrayList<String>();
+                    for( int i = 0; i < reviewsArray.length(); ++i ){
+                        JSONObject review = reviewsArray.getJSONObject(i);
+                        JSONObject authCont;
+                        if(review.has("author") && review.has("content")){
+                            authCont = new JSONObject().put("author", review.getString("author")).put("content", review.getString("content"));
+                            reviewsList.add(authCont.toString());
+                        }
+                    }
+                    ReviewsAdapter reviewsAdapter = new ReviewsAdapter(context, R.layout.movie_reviews, reviewsList.toArray());
+                    reviewsView.setAdapter(reviewsAdapter);
+                }
+
+            }
+            catch(Exception e){
+                Log.e("RevTaskOnPoE", e.toString());
+            }
         }
     }
 }

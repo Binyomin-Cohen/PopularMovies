@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPrefereneceChangeListener;
     private SharedPreferences prefs = null;
     boolean byPopular = false;
-    String urlPopular = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=APIKEY";
-    String urlTopRated = "https://api.themoviedb.org/3/discover/movie?sort_by=top_rated.desc&api_key=APIKEY";
+    static final String API_KEY = "";
+    String urlPopular = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=" + API_KEY;
+    String urlTopRated = "https://api.themoviedb.org/3/discover/movie?sort_by=top_rated.desc&api_key="+ API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

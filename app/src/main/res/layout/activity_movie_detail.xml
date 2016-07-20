@@ -47,5 +47,18 @@
         android:id="@+id/button"
         android:layout_gravity="center_horizontal" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Reviews"
+        android:id="@+id/reviewTitle" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/reviewsListView"
+        android:layout_gravity="center_horizontal" />
+
 
 </LinearLayout>
