@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieListFragment.OnFragmentInteractionListener{
 
     ArrayList<String> movies;  // this is the toString of the JSONObject of each movie
     JSONArray movieResponse;
@@ -87,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack("settings")
                 .commit();
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     private class MovieGetterTask extends AsyncTask<String, Integer, String> {
