@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MainActivity extends AppCompatActivity implements MovieListFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements MovieListFragment.MovieListListener{
 
     ArrayList<String> movies;  // this is the toString of the JSONObject of each movie
     JSONArray movieResponse;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements MovieListFragment
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onMovieSelected(Uri uri) {
 
     }
 
